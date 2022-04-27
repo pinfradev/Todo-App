@@ -31,6 +31,7 @@ function App() {
 
     const completedTodos = todos.filter(todo => todo.completed).length
     const totalTodos = todos.length
+    const searchedTodos = todos.filter(todo => todo.text.includes(searchValue,0))
 
     return (
         <React.Fragment>
@@ -46,11 +47,12 @@ function App() {
 
             <TodoList>
                 {
-                    todos.map(todo => (
+                    (searchValue.length == 0 ? todos : searchedTodos).map(todo => (
                         < TodoItem 
                         key={todo.text} 
                         text={todo.text}
-                        completed = {todo.completed}/>
+                        completed = {todo.completed}
+                        />
                 )) 
                 }
             </TodoList>
