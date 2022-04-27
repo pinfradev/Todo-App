@@ -6,7 +6,7 @@ import { TodoItem } from "./TodoItem";
 
 import React from "react";
 
-const todos = [
+const todosDefault = [
     {
         text: 'Cortar cebolla',
         completed: true
@@ -17,7 +17,7 @@ const todos = [
     },
     {
         text: 'Llorar con la llorona',
-        completed: false
+        completed: true
     },
     {
         text: 'ALALALAL',
@@ -26,11 +26,23 @@ const todos = [
 ];
 
 function App() {
+    const [todos, setTodos] = React.useState(todosDefault)
+    const [searchValue, setSearchValue] = React.useState('')
+
+    const completedTodos = todos.filter(todo => todo.completed).length
+    const totalTodos = todos.length
+
     return (
         <React.Fragment>
-            <TodoCounter />
+            <TodoCounter 
+                total = {totalTodos}
+                completed = {completedTodos}
+            />
 
-            <TodoSearch />
+            <TodoSearch 
+                setSearchValue = {setSearchValue}
+                searchValue = {searchValue} 
+            />
 
             <TodoList>
                 {
