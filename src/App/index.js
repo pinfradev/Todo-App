@@ -21,18 +21,32 @@ const todosDefault = [
     }
 ];
 
-function App() {
-    const localStorageTodos = localStorage.getItem('TODOS_V1')
-    let parsedTodos
+function useLocalStorage(itemName, initialValue) {
+    const localStorageItem = localStorage.getItem(itemName)
+    let parsedItem
 
-    if(localStorageTodos) {
-        parsedTodos = JSON.parse(localStorageTodos)
+    if(localStorageItem) {
+        parsedItem = JSON.parse(localStorageItem)
     } else {
-        localStorage.setItem('TODOS_V1', JSON.stringify([]))
-        parsedTodos = []
+        localStorage.setItem('itemName', JSON.stringify(initialValue))
+        parsedItem = initialValue
     }
 
-    const [todos, setTodos] = React.useState(parsedTodos)
+    const [item, setItem] = React.useState(parsedItem)
+
+    const saveItem = (newItem) => {
+        const stringifiedItem =  JSON.stringify(newItem)
+        localStorage.setItem(itemName, stringifiedItem)
+        setItem(newItem)
+    }
+
+    return [item, saveItem]
+}
+
+function App() {
+    
+    const [todos, saveTodos] = useLocalStorage('TODOS_V1', [])
+   
     const [searchValue, setSearchValue] = React.useState('')
 
     const completedTodos = todos.filter(todo => todo.completed).length
@@ -50,28 +64,24 @@ function App() {
         searchedTodos = todos
     }
 
-    const saveTodos = (newTodos) => {
-        const stringifiedTodos =  JSON.stringify(newTodos)
-        localStorage.setItem('TODOS_V1', stringifiedTodos)
-        setTodos(newTodos)
-    }
+    
 
     const completeTodo = (text) => {
         const todoIndex = todos.findIndex(todo => todo.text == text)
-        const newTodos = [...todos]
-        newTodos[todoIndex].completed = true
+        const newItems = [...todos]
+        newItems[todoIndex].completed = true
         // todos[todoIndex] = {
         //     text: todos[todoIndex].text,
         //     completed: true
         // }
-        saveTodos(newTodos)
+        saveTodos(newItems)
     }
 
     const deleteTodo = (text) => {
         const todoIndex = todos.findIndex(todo => todo.text == text)
-        const newTodos = [...todos]
-        newTodos.splice(todoIndex, 1)
-        saveTodos(newTodos)
+        const newItems = [...todos]
+        newItems.splice(todoIndex, 1)
+        saveTodos(newItems)
     }
 
     return (
