@@ -47,7 +47,6 @@ function AppUI() {
             </Modal>}
 
             <CreateTodoButton 
-            openModal={openModal}
             setOpenModal = {setOpenModal}
             />
 
